@@ -20,7 +20,7 @@ class SimpleAuth0ServiceProvider extends ServiceProvider
         //   > php artisan vendor:publish --tag=laravel-simple-auth0-migrations
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/database/migrations/2024_04_23_000000_edit_users_table_auth0_changes.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_edit_users_table_auth0_changes.php'),
+                __DIR__.'/../templates/database/migrations/2024_04_23_000000_edit_users_table_auth0_changes.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_edit_users_table_auth0_changes.php'),
             ], 'laravel-simple-auth0-migrations');
         }
     }
