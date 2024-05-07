@@ -27,6 +27,11 @@ php artisan migrate
 ```
 
 > Note: in modifying the `users` table, the published migration adds the `sub` field, drops the *unique* constraint on the `email` field, and drops the `password` and `email_verified` fields.   if your `users` field contains existing user/password entries you with to retain, you should modify the default migration to retain your existing fields.
+> 
+
+> [!NOTE]
+>
+> in modifying the `users` table, the published migration adds the `sub` field, drops the *unique* constraint on the `email` field, and drops the `password` and `email_verified` fields.   if your `users` field contains existing user/password entries you with to retain, you should modify the default migration to retain your existing fields.
 
 Modify `Models\User.php` to reflect these changes:
 
