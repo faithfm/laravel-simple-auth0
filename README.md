@@ -26,7 +26,9 @@ php artisan vendor:publish --tag=laravel-simple-auth0-migrations
 php artisan migrate
 ```
 
-> Note: in modifying the `users` table, the published migration adds the `sub` field, drops the *unique* constraint on the `email` field, and drops the `password` and `email_verified` fields.   if your `users` field contains existing user/password entries you with to retain, you should modify the default migration to retain your existing fields.
+> [!NOTE]
+>
+> In modifying the `users` table, the published migration adds the `sub` field, drops the *unique* constraint on the `email` field, and drops the `password` and `email_verified` fields.   if your `users` field contains existing user/password entries you with to retain, you should modify the default migration to retain your existing fields.
 
 Modify `Models\User.php` to reflect these changes:
 
@@ -54,7 +56,7 @@ Modify `Models\User.php` to reflect these changes:
 ### Configuration:
 
 1. Create a "Regular Web Application" in your [Auth0 Dashboard](https://manage.auth0.com/), and configure the allowed Callback + Logout URLs as required.    (See Laravel Auth0 SDK docs for [more details](https://github.com/auth0/laravel-auth0/blob/main/docs/Configuration.md#creating-applications-manually))
-2. Use these details to configure your `.env` file:
+2. Use these details to configure your `.env` file, replacing them with your own credentials:
 
 ```bash
 AUTH0_DOMAIN=XXXX.xx.auth0.com
@@ -89,7 +91,9 @@ Don't forget, Authentication (AuthN) is about knowing **who** is using a system.
 
 For a simple table/model-based approach to user permissions / Authorization you might like to try our [Laravel Simple Permissions](https://github.com/faithfm/laravel-simple-permissions) package.  
 
-Note: These packages are both part of our overall AuthN/AuthZ pattern that we deploy for our apps.  (Our [Faith FM Laravel Auth0 Pattern](https://github.com/faithfm/laravel-auth0-pattern) package is more opinionated than the underlying packages, and includes a number of published template files that may be less helpful for a wider audience, but you're welcome to use them if they are helpful.)
+> [!NOTE]
+>
+> These packages are both part of our overall AuthN/AuthZ pattern that we deploy for our apps.  (Our [Faith FM Laravel Auth0 Pattern](https://github.com/faithfm/laravel-auth0-pattern) package is more opinionated than the underlying packages, and includes a number of published template files that may be less helpful for a wider audience, but you're welcome to use them if they are helpful.)
 
 
 
@@ -98,7 +102,11 @@ Note: These packages are both part of our overall AuthN/AuthZ pattern that we de
 Three **routes** are registered:  /login, /logout, /callback
 
 * The `/login` route redirects to the Auth0 login page, which redirects back to the `/callback` route on success.
-  * Note: this route seeks to capture the 'previous' URL as the 'intended' URL for the callback to redirect to after a successful login
+  
+> [!IMPORTANT]
+>
+> This route seeks to capture the 'previous' URL as the 'intended' URL for the callback to redirect to after a successful login
+
 
 * The `/callback` route:
   * Validate callback request parameters and retrieves an **Auth0 user** (using [Auth0 PHP SDK](https://github.com/auth0/auth0-PHP/tree/8.0.0))
