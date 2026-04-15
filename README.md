@@ -7,7 +7,7 @@ A simple/lightweight way to integrate [Auth0](https://auth0.com/) into your Lara
 * Minimal configuration.
 * Based on Laravel's default authentication guard ('session' / SessionGuard) - ie: no special authentication drivers required.
 * Provides a genuine User model.  (A lot of Laravel libraries (including Nova) break if a user-provider provides something else.)
-* The only dependency is Auth0's [PHP SDK](https://github.com/auth0/auth0-PHP/tree/8.0.0).
+* The only dependency is Auth0's [PHP SDK](https://github.com/auth0/auth0-PHP).
 
 This library was developed after spending a many hours re-integrating our Laravel apps with each major update of Auth0's official [Laravel SDK](https://github.com/auth0/laravel-auth0) (`auth0/login` package).  Our applications are stateful "PHP Web Applications" (rather than stateless "PHP Backend APIs" interfacing to an SPA with JWTs), and we did not need a lot of the advanced features included in the Laravel SDK, so we decided to develop a simple package based around the [Auth0 QuickStart](https://auth0.com/docs/quickstart/webapp/php) for a simple PHP Web Application.
 
@@ -16,6 +16,10 @@ If you would like a simple way to integrate Auth0 with Laravel but would prefer 
 
 
 ### Installation:
+
+> [!IMPORTANT]
+>
+> **PHP 8.2+ required** — This package requires PHP 8.2 or higher due to security updates in the underlying Auth0 SDK.
 
 Assuming you have a standard Laravel application (with the default 'session' driver in `config/auth.php`), you can add this package using composer and run the database migration to prepare the `users` table for Auth0 (vs password-based) logins.
 
@@ -50,6 +54,27 @@ Modify `Models\User.php` to reflect these changes:
 -       'password' => 'hashed',
     ];
 ```
+
+
+
+### Migrating from Earlier Versions:
+
+If you're upgrading from version 1.0.2 or earlier, please follow these steps:
+
+1. **Update PHP requirement**: This package now requires PHP 8.2 or higher. Ensure your server meets this requirement.
+
+2. **Update composer dependencies**:
+   ```bash
+   composer update faithfm/laravel-simple-auth0
+   ```
+
+3. **Clear your application cache**:
+   ```bash
+   php artisan config:clear
+   php artisan cache:clear
+   ```
+
+This update pulls in upstream fixes for 5 Auth0 SDK advisories, including one Critical CVSS 9.1 issue.
 
 
 
@@ -109,10 +134,9 @@ Three **routes** are registered:  /login, /logout, /callback
 
 
 * The `/callback` route:
-  * Validate callback request parameters and retrieves an **Auth0 user** (using [Auth0 PHP SDK](https://github.com/auth0/auth0-PHP/tree/8.0.0))
+  * Validate callback request parameters and retrieves an **Auth0 user** (using [Auth0 PHP SDK](https://github.com/auth0/auth0-PHP))
   * Load (or creates) a matching **User model** 
     * Auth0's `sub` property is used for model retrieval.
     * Auth0's `email` + `name` properties are additionally used for model creation.
   * Initialise Laravel's default authentication guard ('session' / SessionGuard) to "login" this retrieved User model.
   * Laravel's SessionGuard stores model's `id` in the session, and uses it to retrieve the User model for all future requests.
-
